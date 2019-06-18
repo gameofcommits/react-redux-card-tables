@@ -1,31 +1,33 @@
-import React from 'react'
+import React from 'react';
 
-import { Add, Delete, Create, ArrowBack } from '@material-ui/icons'
-import { RegularCard, Button } from '..'
-import { bindActionCreators } from 'redux'
-import { withStyles, Tooltip } from '@material-ui/core'
-import { modalClose } from '../../redux/actions'
-import { DataTable } from './DataTable'
-import { history } from '../../utils'
-import { connect } from 'react-redux'
+import {
+  Add, Delete, Create, ArrowBack,
+} from '@material-ui/icons';
+import { bindActionCreators } from 'redux';
+import { withStyles, Tooltip } from '@material-ui/core';
+import { connect } from 'react-redux';
+import RegularCard from './RegularCard';
+import Button from './Button';
+import { modalClose } from '../../redux/actions';
+import DataTable from './DataTable';
 
-import PaginationTable from './PaginationTable'
-import SearchTable from './SearchTable'
-import tableStyle from '../../assets/jss/material-dashboard-react/tableStyle'
-import GridItem from '../Grid/GridItem'
+import PaginationTable from './PaginationTable';
+import SearchTable from './SearchTable';
+import tableStyle from '../assets/tableStyle';
+import GridItem from './GridItem';
 
 const mapStateToProps = state => ({
   searchParams: state.search.searchParams,
   permissions: state.auth.permissions,
-})
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({ modalClose }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ modalClose }, dispatch);
 
 class CardTableClass extends React.Component {
   render() {
-    const { modalName, grid = { md: 12 } } = this.props
-    if (modalName || grid === false) return this.renderRegularCard()
-    return <GridItem {...grid}>{this.renderRegularCard()}</GridItem>
+    const { modalName, grid = { md: 12 } } = this.props;
+    if (modalName || grid === false) return this.renderRegularCard();
+    return <GridItem {...grid}>{this.renderRegularCard()}</GridItem>;
   }
 
   renderRegularCard() {
@@ -54,16 +56,19 @@ class CardTableClass extends React.Component {
       rowColor,
       cardTitle,
       expansion,
-    } = this.props
+      history,
+    } = this.props;
 
-    const actions = this.getActions()
+    const actions = this.getActions();
     return (
       <RegularCard
         expansion={expansion}
-        getButton={modalName && searchParams && Object.keys(searchParams).length > 0 ? getButton : null}
+        getButton={
+          modalName && searchParams && Object.keys(searchParams).length > 0 ? getButton : null
+        }
         modalName={modalName}
         modalClose={modalClose}
-        cardTitle={cardTitle ? cardTitle : `Lista de ${entity}`}
+        cardTitle={cardTitle || `Lista de ${entity}`}
         cardHeaderAction={
           links && (
             <GridItem md={12}>
@@ -83,13 +88,18 @@ class CardTableClass extends React.Component {
                   key={idl}
                 >
                   <Button
-                    onClick={link.onClick ? link.onClick : () => history.push(`${match.url || url}/novo`)}
+                    onClick={
+                      link.onClick ? link.onClick : () => history.push(`${match.url || url}/novo`)
+                    }
                     size="sm"
                     color={link.color || 'white'}
                     simple
                   >
                     {link.icon && (
-                      <link.icon className={classes.iconSmall} style={{ marginRight: 5, marginBottom: 2 }} />
+                      <link.icon
+                        className={classes.iconSmall}
+                        style={{ marginRight: 5, marginBottom: 2 }}
+                      />
                     )}
                     {!link.icon && <Add className={classes.iconSmall} />}
                     {link.label && link.label}
@@ -101,7 +111,12 @@ class CardTableClass extends React.Component {
         }
         content={[
           typeof search === 'undefined' && (
-            <SearchTable actionList={actionList} entity={entity} extraParams={extraParams} key="0" />
+            <SearchTable
+              actionList={actionList}
+              entity={entity}
+              extraParams={extraParams}
+              key="0"
+            />
           ),
           typeof search === 'object' && search,
           <DataTable
@@ -127,7 +142,7 @@ class CardTableClass extends React.Component {
             page={page}
             key="2"
             extraParams={extraParams}
-          />
+          />,
         ]}
         footer={[
           footer && (
@@ -140,49 +155,51 @@ class CardTableClass extends React.Component {
             >
               <ArrowBack /> Voltar
             </Button>
-          )
+          ),
         ]}
       />
-    )
+    );
   }
 
   componentDidMount() {
-    const { searchOnMount = true, actionList, searchParams, entity, extraParams } = this.props
+    const {
+      searchOnMount = true, actionList, searchParams, entity, extraParams,
+    } = this.props;
 
     if (actionList && searchOnMount) {
-      let myParams = { ...searchParams[entity], ...extraParams }
+      let myParams = { ...searchParams[entity], ...extraParams };
       if (!myParams) {
-        myParams = {}
+        myParams = {};
       }
-      actionList({ offset: 0, ...myParams })
+      actionList({ offset: 0, ...myParams });
     }
   }
 
   shouldComponentUpdate(nextProps) {
-    const { list: nextList } = nextProps
-    const { list } = this.props
+    const { list: nextList } = nextProps;
+    const { list } = this.props;
 
-    return (list === null && nextList) || JSON.stringify(list) !== JSON.stringify(nextList)
+    return (list === null && nextList) || JSON.stringify(list) !== JSON.stringify(nextList);
   }
 
   componentWillUnmount() {
-    this.props.actionClear && this.props.actionClear()
+    this.props.actionClear && this.props.actionClear();
   }
 
   getActions() {
-    let { actions, extraActions, isSmartCard } = this.props
+    let { actions, extraActions, isSmartCard } = this.props;
 
-    if (isSmartCard) return actions
+    if (isSmartCard) return actions;
     if (actions === false) {
-      actions = null
+      actions = null;
     } else if (actions === undefined) {
-      actions = this.defaultActions()
+      actions = this.defaultActions();
     }
     if (extraActions) {
-      actions = extraActions.concat(actions)
+      actions = extraActions.concat(actions);
     }
 
-    return actions
+    return actions;
   }
 
   defaultActions() {
@@ -193,8 +210,8 @@ class CardTableClass extends React.Component {
         icon: Create,
         permission: `${this.props.permissionPrefix}_EDITAR`,
         click: item => history.push(`${this.props.location.pathname}/${item.id}`),
-      }
-    ]
+      },
+    ];
 
     if (this.props.actionDelete) {
       actions.push({
@@ -204,14 +221,14 @@ class CardTableClass extends React.Component {
         permission: `${this.props.permissionPrefix}_EXCLUIR`,
         confirm: true,
         click: this.props.actionDelete,
-      })
+      });
     }
 
-    return actions
+    return actions;
   }
 }
 
 export const CardTable = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(withStyles(tableStyle)(CardTableClass))
+  mapDispatchToProps,
+)(withStyles(tableStyle)(CardTableClass));

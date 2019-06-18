@@ -1,21 +1,21 @@
-import React from 'react'
+import React from 'react';
 
-import { IconButtonCustom } from '..'
-import { checkPermission } from '../../utils'
+import { Tooltip } from '@material-ui/core';
+import IconButtonCustom from './IconButtonCustom';
+import checkPermission from '../utils';
 
-import ButtonConfirm from '../ButtonConfirm/ButtonConfirm'
-import { Tooltip } from '@material-ui/core'
+import ButtonConfirm from './ButtonConfirm';
 
-export const ActionButton = ({ item, action, permissions }) => {
+function ActionButton({ item, action, permissions }) {
   if (
-    !checkPermission(permissions, action.permission) ||
-    (action.condition && typeof action.condition === 'function' && !action.condition(item))
+    !checkPermission(permissions, action.permission)
+    || (action.condition && typeof action.condition === 'function' && !action.condition(item))
   ) {
-    return null
+    return null;
   }
 
   if (action.confirm === true) {
-    return <ButtonConfirm action={action} item={item} />
+    return <ButtonConfirm action={action} item={item} />;
   }
 
   if (action.href) {
@@ -29,7 +29,9 @@ export const ActionButton = ({ item, action, permissions }) => {
               textTransform: 'uppercase',
             }}
           >
-            {action.title ? (typeof action.title === 'function' ? action.title(item) : action.title) : ''}
+            {action.title && typeof action.title === 'function'
+              ? action.title(item)
+              : action.title || ''}
           </span>
         }
       >
@@ -37,7 +39,7 @@ export const ActionButton = ({ item, action, permissions }) => {
           {action.icon && <action.icon />}
         </IconButtonCustom>
       </Tooltip>
-    )
+    );
   }
 
   return (
@@ -50,7 +52,9 @@ export const ActionButton = ({ item, action, permissions }) => {
             textTransform: 'uppercase',
           }}
         >
-          {action.title ? (typeof action.title === 'function' ? action.title(item) : action.title) : ''}
+          {action.title && typeof action.title === 'function'
+            ? action.title(item)
+            : action.title || ''}
         </span>
       }
     >
@@ -58,5 +62,7 @@ export const ActionButton = ({ item, action, permissions }) => {
         {action.icon && <action.icon />}
       </IconButtonCustom>
     </Tooltip>
-  )
+  );
 }
+
+export default ActionButton;
