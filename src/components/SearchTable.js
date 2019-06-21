@@ -5,16 +5,22 @@ import { withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { Search } from '@material-ui/icons';
 import CustomInput from './CustomInput';
-import { searchUpdated } from '../../redux/actions';
+// import { searchUpdated } from '../../redux/actions';
 import GridContainer from './GridContainer';
 import tableStyle from '../assets/tableStyle';
 import GridItem from './GridItem';
+import Button from './Button';
 
 const mapStateToProps = state => ({
   searchParams: state.search.searchParams,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ searchUpdated }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    /* searchUpdated */
+  },
+  dispatch,
+);
 
 class SearchTable extends React.Component {
   render() {

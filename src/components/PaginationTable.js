@@ -7,13 +7,18 @@ import { bindActionCreators } from 'redux';
 import GridContainer from './GridContainer';
 import Pagination from './Pagination';
 import tableStyle from '../assets/tableStyle';
-import { searchUpdated } from '../../redux/actions';
+// import { searchUpdated } from '../../redux/actions';
 
 const mapStateToProps = state => ({
   searchParams: state.search.searchParams,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ searchUpdated }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    /* searchUpdated */
+  },
+  dispatch,
+);
 
 class PaginationTable extends React.Component {
   render() {

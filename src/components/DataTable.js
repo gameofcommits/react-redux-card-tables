@@ -14,7 +14,7 @@ import checkPermission from '../utils';
 import tableStyle from '../assets/tableStyle';
 
 const TableComponent = ({
-  list: listData,
+  list,
   entity,
   count,
   classes,
@@ -25,8 +25,7 @@ const TableComponent = ({
   excludeId,
   rowColor,
 }) => {
-  let list = listData;
-
+  if (!list) return null;
   const calcWidthButton = (length) => {
     if (length === 2) return 80;
     if (length === 3) return 120;
@@ -35,7 +34,7 @@ const TableComponent = ({
     return 0;
   };
 
-  if (excludeId) list = listData.filter(i => i.id !== excludeId);
+  if (excludeId) list = list.filter(i => i.id !== excludeId);
   if (list.length === 0) {
     return (
       <div style={{ textAlign: 'center', marginTop: 40 }}>{`Não há ${entity} a ser exibido`}</div>

@@ -8,7 +8,7 @@ import { withStyles, Tooltip } from '@material-ui/core';
 import { connect } from 'react-redux';
 import RegularCard from './RegularCard';
 import Button from './Button';
-import { modalClose } from '../../redux/actions';
+import { modalClose } from '../reducers/modal';
 import DataTable from './DataTable';
 
 import PaginationTable from './PaginationTable';
@@ -18,10 +18,15 @@ import GridItem from './GridItem';
 
 const mapStateToProps = state => ({
   searchParams: state.search.searchParams,
-  permissions: state.auth.permissions,
+  // permissions: state.auth.permissions,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ modalClose }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {
+    modalClose,
+  },
+  dispatch,
+);
 
 class CardTableClass extends React.Component {
   render() {
@@ -209,7 +214,7 @@ class CardTableClass extends React.Component {
         title: 'Editar registro',
         icon: Create,
         permission: `${this.props.permissionPrefix}_EDITAR`,
-        click: item => history.push(`${this.props.location.pathname}/${item.id}`),
+        click: item => this.props.history.push(`${this.props.location.pathname}/${item.id}`),
       },
     ];
 
